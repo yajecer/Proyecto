@@ -18,7 +18,7 @@
 						<li>Costo: <?php echo htmlspecialchars($dataservice[3]);?></li>
 						<li>Lugar: <?php echo $dataservice[4];?></li>
 						<li>Fecha Inicio: <?php echo htmlspecialchars($dataservice[5]).' Fecha Final: '. htmlspecialchars($dataservice[6]);?></li>
-						<li class="li_servicio">Contacto: <?php echo $dataservice[4]." E-mail: ".$dataservice[4];?></li>
+						<li class="li_servicio">Contacto: <?php echo $dataservice[10]." E-mail: ".$dataservice[11];?></li>
 					<?php endforeach; ?>
 				</ul>
 			</div>

@@ -2,38 +2,74 @@
  
 	function login()
 	{
-		// Conectar con la base de datos y seleccionarla
-		$conexion = connect();
-		$sql = "SELECT * FROM puser WHERE user = '".$_POST['user']."'";
-		
-		// Ejecutar la consulta SQL
-		$resultado = mysql_query($sql, $conexion);
-		if (!$resultado) {
-			echo mysql_error();
-			exit;
-		}
-		// Crear el array de elementos para la capa de la vista
-		$datauser = array();
-		while ($fila = mysql_fetch_array($resultado))
-		{
-			$datauser[] = $fila;
-		}
+		if($_POST['password'] && $_POST['user']){
+			// Conectar con la base de datos y seleccionarla
+			$conexion = connect();
+			$sql = "SELECT * FROM puser WHERE user = '".$_POST['user']."'";
+			
+			// Ejecutar la consulta SQL
+			$resultado = mysql_query($sql, $conexion);
+			if (!$resultado) {
+				echo mysql_error();
+				exit;
+			}
+			// Crear el array de elementos para la capa de la vista
+			$datauser = array();
+			while ($fila = mysql_fetch_array($resultado))
+			{
+				$datauser[] = $fila;
+			}
 
-		// Cerrar la conexión
-		disconnect($conexion);
-		
-		$login = false;
-		if($datauser[0][1]==$_POST['user'] && $datauser[0][2]==$_POST['password']){
-			// Guardamos una variable
-			$_SESSION['id'] = $datauser[0][0]; 
-			$_SESSION['nombre'] = $datauser[0][1]; 
-			$login = true;
+			// Cerrar la conexión
+			disconnect($conexion);
+			
+			$login = false;
+			if($datauser[0][1]==$_POST['user'] && $datauser[0][2]==$_POST['password']){
+				// Guardamos una variable
+				$_SESSION['id'] = $datauser[0][0]; 
+				$_SESSION['nombre'] = $datauser[0][1]; 
+				$login = true;
+			}
+			return $login;
 		}
-		return $login;
 	}
 	
 	function logout(){
 		session_destroy();
+	}
+	
+	function registro()
+	{
+		if($_POST['user']){
+			// Conectar con la base de datos y seleccionarla
+			$conexion = connect();
+			$sql = "SELECT * FROM puser WHERE user = '".$_POST['user']."'";
+			
+			// Ejecutar la consulta SQL
+			$resultado = mysql_query($sql, $conexion);
+			if (!$resultado) {
+				echo mysql_error();
+				exit;
+			}
+			// Crear el array de elementos para la capa de la vista
+			$datauser = array();
+			while ($fila = mysql_fetch_array($resultado))
+			{
+				$datauser[] = $fila;
+			}
+
+			// Cerrar la conexión
+			disconnect($conexion);
+			
+			$login = false;
+			if($datauser[0][1]==$_POST['user'] && $datauser[0][2]==$_POST['password']){
+				// Guardamos una variable
+				$_SESSION['id'] = $datauser[0][0]; 
+				$_SESSION['nombre'] = $datauser[0][1]; 
+				$login = true;
+			}
+			return $login;
+		}
 	}
 	
 	function getAddresses()
@@ -129,11 +165,16 @@ echo "login";
 		return $userdata;
 	}
 	
-	function getServices($s,$ser)
+	function getServices($cat,$subcat)
 	{
 		// Conectar con la base de datos y seleccionarla
 		$conexion = connect();
-		$sql = "SELECT * FROM pservicio WHERE id_categoria='".$s."' AND id_subcategoria = '".$ser."'";
+		$sql = "SELECT s.id,s.name,s.descripcion,s.costo,s.direccion,
+		s.fechaInicio,s.fechaFin,s.id_categoria,s.id_subcategoria,s.id_user,u.nombre,u.email 
+		FROM pservicio s
+		JOIN puser u 
+		on u.id = s.id_user
+		WHERE s.id_categoria='".$cat."' AND s.id_subcategoria = '".$subcat."'";
 		
 		// Ejecutar la consulta SQL
 		$resultado = mysql_query($sql, $conexion);
