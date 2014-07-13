@@ -13,19 +13,23 @@
 			exit;
 		}
 		// Crear el array de elementos para la capa de la vista
-		$addresses = array();
+		$datauser = array();
 		while ($fila = mysql_fetch_array($resultado))
 		{
-			$addresses[] = $fila;
+			$datauser[] = $fila;
 		}
 
 		// Cerrar la conexión
 		disconnect($conexion);
-
-		// Guardamos una variable 
-		$_SESSION['nombre'] = $addresses[0][1]; 
 		
-		return $addresses;
+		$login = false;
+		if($datauser[0][1]==$_POST['user'] && $datauser[0][2]==$_POST['password']){
+			// Guardamos una variable
+			$_SESSION['id'] = $datauser[0][0]; 
+			$_SESSION['nombre'] = $datauser[0][1]; 
+			$login = true;
+		}
+		return $login;
 	}
 	
 	function logout(){
@@ -125,11 +129,36 @@ echo "login";
 		return $userdata;
 	}
 	
-	function getServices($ser)
+	function getServices($s,$ser)
 	{
 		// Conectar con la base de datos y seleccionarla
 		$conexion = connect();
-		$sql = "SELECT * FROM pservicio WHERE id_subcategoria = '".$ser."'";
+		$sql = "SELECT * FROM pservicio WHERE id_categoria='".$s."' AND id_subcategoria = '".$ser."'";
+		
+		// Ejecutar la consulta SQL
+		$resultado = mysql_query($sql, $conexion);
+		if (!$resultado) {
+			echo mysql_error();
+			exit;
+		}
+		// Crear el array de elementos para la capa de la vista
+		$dataservices = array();
+		while ($fila = mysql_fetch_array($resultado))
+		{
+			$dataservices[] = $fila;
+		}
+
+		// Cerrar la conexión
+		disconnect($conexion); 
+		
+		return $dataservices;
+	}
+	
+	function getMyServices()
+	{
+		// Conectar con la base de datos y seleccionarla
+		$conexion = connect();
+		$sql = "SELECT * FROM pservicio WHERE id_user='".$_SESSION['id']."'";
 		
 		// Ejecutar la consulta SQL
 		$resultado = mysql_query($sql, $conexion);
@@ -152,27 +181,29 @@ echo "login";
 	
 	function getSubcategorias($s)
 	{
-		// Conectar con la base de datos y seleccionarla
-		$conexion = connect();
-		$sql = "SELECT * FROM psubcategoria WHERE id_categoria = '".$s."'";
-		
-		// Ejecutar la consulta SQL
-		$resultado = mysql_query($sql, $conexion);
-		if (!$resultado) {
-			echo mysql_error();
-			exit;
-		}
 		// Crear el array de elementos para la capa de la vista
-		$dataubcategorias = array();
-		while ($fila = mysql_fetch_array($resultado))
-		{
-			$dataubcategorias[] = $fila;
-		}
+		$datasubcategorias = array();
+		if($s != null || $s != ""){
+			// Conectar con la base de datos y seleccionarla
+			$conexion = connect();
+			$sql = "SELECT * FROM psubcategoria WHERE id_categoria = '".$s."'";
+			
+			// Ejecutar la consulta SQL
+			$resultado = mysql_query($sql, $conexion);
+			if (!$resultado) {
+				echo mysql_error();
+				exit;
+			}
+			
+			while ($fila = mysql_fetch_array($resultado))
+			{
+				$datasubcategorias[] = $fila;
+			}
 
-		// Cerrar la conexión
-		disconnect($conexion); 
-		
-		return $dataubcategorias;
+			// Cerrar la conexión
+			disconnect($conexion); 
+		}
+		return $datasubcategorias;
 	}
 
 	function connect()

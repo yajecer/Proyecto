@@ -6,7 +6,7 @@
 					<h3>Login</h3>
 					<form action="index.php" id="contact-form" method="post" enctype="multipart/form-data">
 							<label><span class="text-form">Usuario:</span><input type="text" name="user"/></label>
-							<label><span class="text-form">Contraseña:</span><input type="text" /></label>
+							<label><span class="text-form">Contraseña:</span><input type="text" name="password"/></label>
 							<div class="buttons">
 								<a onClick="document.getElementById('contact-form').submit()">Aceptar</a>
 								<input type="hidden" name="actionform" value="login"/>
@@ -15,7 +15,7 @@
 				</div>
 				<div class="col-2">
 					<h3>Registro</h3>
-					<form action="index.php" id="contact-formr" method="post" enctype="multipart/form-data">
+					<form action="index.php" id="contact-form" method="post" enctype="multipart/form-data">
 							<label><span class="text-form">Usuario:</span><input type="text" name="user"/></label>
 							<label><span class="text-form">Nombre:</span><input type="text" name="user"/></label>
 							<label><span class="text-form">Correo electrónico:</span><input type="text" name="user"/></label>

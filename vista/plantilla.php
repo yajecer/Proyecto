@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<title>Contact</title>
-		<meta charset="utf-8">
+		<meta charset="unicode">
 		<link rel="stylesheet" href="css/reset.css" type="text/css" media="screen">
 		<link rel="stylesheet" href="css/style.css" type="text/css" media="screen">
 		<link rel="stylesheet" href="css/layout.css" type="text/css" media="screen">

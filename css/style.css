@@ -479,6 +479,14 @@ footer {
 		-moz-border-bottom-right-radius:100%;
 		-webkit-border-bottom-right-radius:100%;
 	}
+	
+.servicio{
+	margin-top: 44px;
+}
+
+.li_servicio{
+	margin-bottom: 15px;
+}
 
 .list-services {
 	padding:0;
