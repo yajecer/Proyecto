@@ -97,20 +97,22 @@ echo "login";
 	}
 	
 	function register(){
+	
+		$result = true;
+		
 		// Conectar con la base de datos y seleccionarla
 		$conexion = connect();
 		
 		$sql = "INSERT INTO puser (user) VALUES ('".$_POST['user']."')";
-		mysql_query($sql,$conexion);
+		$resultado = mysql_query($sql,$conexion);
+		if (!$resultado) {
+			$result = false;
+		}
 		
 		// Cerrar la conexión
 		disconnect($conexion);
 		
-		echo "<script> 
-				alert('Datos guardados');
-			</script>"; 
-		
-		
+		return result;		
 	}
 	function edit(){
 		// Conectar con la base de datos y seleccionarla
@@ -138,6 +140,22 @@ echo "login";
 				alert('Datos borrados');
 				setTimeout('location.href='index.php', 4);
 			</script>"; 
+	}
+	
+	function eraseService($id){
+		$resultado = true;
+		// Conectar con la base de datos y seleccionarla
+		$conexion = connect();
+		
+		$sql = "DELETE FROM pservicio WHERE id = ".$id."";
+		$resultado = mysql_query($sql,$conexion);
+		if (!$resultado) {
+			$resultado = false;
+		}
+		// Cerrar la conexión
+		disconnect($conexion);
+		
+		return $resultado;
 	}
 	
 	function getUser()
@@ -192,6 +210,39 @@ echo "login";
 		// Cerrar la conexión
 		disconnect($conexion); 
 		
+		return $dataservices;
+	}
+	
+	function buscarServices($search)
+	{
+	
+		// Crear el array de elementos para la capa de la vista
+		$dataservices = array();
+		if($search != null && $search != ""){
+			// Conectar con la base de datos y seleccionarla
+			$conexion = connect();
+			$sql = "SELECT s.id,s.name,s.descripcion,s.costo,s.direccion,
+			s.fechaInicio,s.fechaFin,s.id_categoria,s.id_subcategoria,s.id_user,u.nombre,u.email 
+			FROM pservicio s
+			JOIN puser u 
+			on u.id = s.id_user
+			WHERE s.name like '%".$search."%'";
+			
+			// Ejecutar la consulta SQL
+			$resultado = mysql_query($sql, $conexion);
+			if (!$resultado) {
+				echo mysql_error();
+				exit;
+			}
+			
+			while ($fila = mysql_fetch_array($resultado))
+			{
+				$dataservices[] = $fila;
+			}
+
+			// Cerrar la conexión
+			disconnect($conexion); 
+		}
 		return $dataservices;
 	}
 	
@@ -251,7 +302,11 @@ echo "login";
 	{
 	  // Conectar con la base de datos y seleccionarla
 	  $conexion = mysql_connect('localhost', 'root', '');
-	  mysql_select_db('contact', $conexion);
+		mysql_query("SET character_set_results=utf8", $conexion);
+		mb_language('uni'); 
+		mb_internal_encoding('UTF-8');
+		mysql_query("set names 'utf8'",$conexion);
+		mysql_select_db('contact', $conexion);
 	  return $conexion;
 	 
 	}

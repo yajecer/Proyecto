@@ -8,9 +8,9 @@
 					<li>
 						<a>Servicios</a>
 						<ul>
-							<li><a href="href="index.php?namePage=configuracion&act=s1">Crear</a></li>
+							<li><a href="index.php?namePage=configuracion&act=sc">Crear</a></li>
 							<?php foreach ($myServicios as $myServicio): ?>
-								<li><?php echo $myServicio[1]; ?><a href="<?php echo 'href="index.php?namePage=configuracion&act=s2&id'.$myServicio[0]; ?>">[Eliminar]</a><a href="<?php echo 'href="index.php?namePage=configuracion&act=s3&id'.$myServicio[0]; ?>">[modificar]</a></li>
+								<li><?php echo $myServicio[1]; ?><a href="<?php echo 'index.php?namePage=configuracion&act=sm&id='.$myServicio[0]; ?>">[modificar]</a><a href="<?php echo 'index.php?namePage=configuracion&act=se&id='.$myServicio[0]; ?>">[eliminar]</a></li>
 							<?php endforeach; ?>
 						</ul>
 					</li>

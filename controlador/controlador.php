@@ -25,68 +25,84 @@
 			logout();
 			header("Location: index.php");
 			break;
-		case 'prefer':
-			$content = 'vista/prefer.php';
-			include('vista/plantilla.php');
-			break;
 		case 'contacts':
 			$content = 'vista/contacts.php';
 			include('vista/plantilla.php');
 			break;
 		case 'configuracion':
-			$myServicios=getMyServices();
-			switch (@$_REQUEST['act'])
-			{
-				case 'u1'://Modificar usuario
-					$content2 = 'vista/user.php';
-					$content = 'vista/configuracion.php';
-					include('vista/plantilla.php');
-					break;
-				case 's1'://Agregar servicio
-					
-					$content2 = 'vista/servicio.php';
-					$content = 'vista/configuracion.php';
-					include('vista/plantilla.php');
-					break;
-				case 's2'://Eliminar sevicio
-					$content2 = 'vista/servicio.php';
-					$content = 'vista/configuracion.php';
-					include('vista/plantilla.php');
-					break;
-				case 's3'://Modificar servicio
-					$content2 = 'vista/servicio.php';
-					$content = 'vista/configuracion.php';
-					include('vista/plantilla.php');
-					break;
-				case 'o1'://Agregar oferta
-					$content2 = 'vista/offer.php';
-					$content = 'vista/configuracion.php';
-					include('vista/plantilla.php');
-					break;
-				case 'o2'://Modificar oferta
-					$content2 = 'vista/offer.php';
-					$content = 'vista/configuracion.php';
-					include('vista/plantilla.php');
-					break;
-				case 'o2'://Eliminar oferta
-					$content2 = 'vista/offer.php';
-					$content = 'vista/configuracion.php';
-					include('vista/plantilla.php');
-					break;
-				default:
-					$datauser = getUser();
-					$content2 = 'vista/user.php';
-					$content = 'vista/configuracion.php';
-					include('vista/plantilla.php');
-					break;
+			if(isset($_SESSION['id'])){
+				$myServicios=getMyServices();
+				switch (@$_REQUEST['act'])
+				{
+					case 'u1'://Modificar usuario
+						$datauser = getUser();
+						$content2 = 'vista/user.php';
+						$content = 'vista/configuracion.php';
+						include('vista/plantilla.php');
+						break;
+					case 'sc'://Agregar servicio
+						$content2 = 'vista/servicio.php';
+						$content = 'vista/configuracion.php';
+						include('vista/plantilla.php');
+						break;
+					case 'se'://Eliminar sevicio
+						$eliminar = eraseService(@$_REQUEST['id']);
+						if($eliminar){
+							$content2 = 'vista/vacio.php';
+							$content = 'vista/configuracion.php';
+							include('vista/plantilla.php');
+							echo '<script>
+							alert("Servicio eliminado!");
+							document.location = "index.php?namePage=configuracion";
+							</script>';
+						}else{
+							$content2 = 'vista/vacio.php';
+							$content = 'vista/configuracion.php';
+							include('vista/plantilla.php');
+							echo '<script>
+							alert("Servicio NO eliminado!");
+							document.location = "index.php?namePage=configuracion";
+							</script>';
+						}
+						break;
+					case 'sm'://Modificar servicio
+						$modificado = $modificarServicio(@$_REQUEST['id']);
+						if($eliminar){
+							$content2 = 'vista/vacio.php';
+							$content = 'vista/configuracion.php';
+							include('vista/plantilla.php');
+							echo '<script>
+							alert("Servicio modificado!");
+							document.location = "index.php?namePage=configuracion";
+							</script>';
+						}else{
+							$content2 = 'vista/vacio.php';
+							$content = 'vista/configuracion.php';
+							include('vista/plantilla.php');
+							echo '<script>
+							alert("Servicio NO modificado!");
+							document.location = "index.php?namePage=configuracion";
+							</script>';
+						}
+						break;
+					default:
+						$datauser = getUser();
+						$content2 = 'vista/vacio.php';
+						$content = 'vista/configuracion.php';
+						include('vista/plantilla.php');
+						break;
+				}
+			}else{
+				$content = 'vista/login.php';
+				include('vista/plantilla.php');
+				echo '<script>
+							alert("Debe ingresar para acceder a la configuración");
+							document.location = "index.php?namePage=login";
+					</script>';
 			}
-			
-			$content2 = 'vista/user.php';
-			$content = 'vista/configuracion.php';
-			include('vista/plantilla.php');
 			break;
 		case 'busq':
-			//buscar($_REQUEST['search']);
+			$resultados = buscarServices(@$_REQUEST['search']);
 			$content = 'vista/busq.php';
 			include('vista/plantilla.php');
 			break;
@@ -155,11 +171,24 @@
 				}
 				
 			}else if($_POST["actionform"]=="register"){
-				register();
-				$content = 'vista/principal.php';
-				include('vista/plantilla.php');
+				$register = register();
+				if($register){
+					$content = 'vista/principal.php';
+					include('vista/plantilla.php');
+				}else{
+					echo '<script>alert("No se pudieron guardar los datos");
+					document.location = "index.php?namePage=login";
+					</script>';
+					//header("Location:index.php?namePage=login");
+				}
+				
 			}else{
 				$content = 'vista/principal.php';
+				include('vista/plantilla.php');
+			}
+			if($_POST["actionform"]=="busq"){
+				$resultados = buscarServices();
+				$content = 'vista/busq.php';
 				include('vista/plantilla.php');
 			}
 		}else{
@@ -167,24 +196,6 @@
 			include('/vista/plantilla.php');
 		}
 	}
-	
-	//Acciones
-	if(isset($_POST['actionform'])){
-		if($_POST["actionform"]=="login"){
-			$addresses = login();
-			//$content = 'vista/principal.php';
-			//include('vista/plantilla.php');
-		}else if($_POST["actionform"]=="register"){
-			register();
-		}//else if($_POST["actionform"]=="edit"){
-		//	edit();
-		//}else if($_POST["actionform"]=="login"){
-		//	login();
-		//}
-	}
-		// Obtener la lista de direcciones
-	/*	$addresses = getAddresses();
-	}*/
 	
 	function agregarServicio(){
 	
