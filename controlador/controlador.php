@@ -107,35 +107,35 @@
 				case '2':
 					$categoria = 'Hogar';
 					$subcategorias = getSubcategorias(@$_REQUEST['s']);
-					$dataservices = getServices(@$_REQUEST['ser']);
+					$dataservices = getServices(@$_REQUEST['s'],@$_REQUEST['ser']);
 					$content = 'vista/subcategorias.php';
 					include('vista/plantilla.php');
 					break;
 				case '3':
 					$categoria = 'Educación';
 					$subcategorias = getSubcategorias(@$_REQUEST['s']);
-					$dataservices = getServices(@$_REQUEST['ser']);
+					$dataservices = getServices(@$_REQUEST['s'],@$_REQUEST['ser']);
 					$content = 'vista/subcategorias.php';
 					include('vista/plantilla.php');
 					break;
 				case '4':
 					$categoria = 'Belleza';
 					$subcategorias = getSubcategorias(@$_REQUEST['s']);
-					$dataservices = getServices(@$_REQUEST['ser']);
+					$dataservices = getServices(@$_REQUEST['s'],@$_REQUEST['ser']);
 					$content = 'vista/subcategorias.php';
 					include('vista/plantilla.php');
 					break;
 				case '5':
 					$categoria = 'Creativos';
 					$subcategorias = getSubcategorias(@$_REQUEST['s']);
-					$dataservices = getServices(@$_REQUEST['ser']);
+					$dataservices = getServices(@$_REQUEST['s'],@$_REQUEST['ser']);
 					$content = 'vista/subcategorias.php';
 					include('vista/plantilla.php');
 					break;
 				case '6':
 					$categoria = 'Otros';
 					$subcategorias = getSubcategorias(@$_REQUEST['s']);
-					$dataservices = getServices(@$_REQUEST['ser']);
+					$dataservices = getServices(@$_REQUEST['s'],@$_REQUEST['ser']);
 					$content = 'vista/subcategorias.php';
 					include('vista/plantilla.php');
 					break;
