@@ -66,24 +66,10 @@
 						}
 						break;
 					case 'sm'://Modificar servicio
-						$modificado = $modificarServicio(@$_REQUEST['id']);
-						if($eliminar){
-							$content2 = 'vista/vacio.php';
-							$content = 'vista/configuracion.php';
-							include('vista/plantilla.php');
-							echo '<script>
-							alert("Servicio modificado!");
-							document.location = "index.php?namePage=configuracion";
-							</script>';
-						}else{
-							$content2 = 'vista/vacio.php';
-							$content = 'vista/configuracion.php';
-							include('vista/plantilla.php');
-							echo '<script>
-							alert("Servicio NO modificado!");
-							document.location = "index.php?namePage=configuracion";
-							</script>';
-						}
+						$dataservicio = getPservicio(@$_REQUEST['id']);
+						$content2 = 'vista/servicio.php';
+						$content = 'vista/configuracion.php';
+						include('vista/plantilla.php');						
 						break;
 					default:
 						$datauser = getUser();

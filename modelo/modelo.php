@@ -297,6 +297,46 @@ echo "login";
 		}
 		return $datasubcategorias;
 	}
+	
+	function getPservicio($id)
+	{
+		// Crear el array de elementos para la capa de la vista
+		$dataservicio = array();
+		if($id != null || $id != ""){
+			// Conectar con la base de datos y seleccionarla
+			$conexion = connect();
+			$sql = "SELECT * FROM pservicio WHERE id = '".$id."'";
+			
+			// Ejecutar la consulta SQL
+			$resultado = mysql_query($sql, $conexion);
+			if (!$resultado) {
+				echo mysql_error();
+				exit;
+			}
+			
+			while ($fila = mysql_fetch_array($resultado))
+			{
+				$dataservicio[] = $fila;
+			}
+
+			// Cerrar la conexión
+			disconnect($conexion); 
+		}
+		return $dataservicio;
+	}
+	
+	function actualizarServicio(){
+		// Conectar con la base de datos y seleccionarla
+		$conexion = connect();
+		
+		$sql = "UPDATE pservicio SET name='".$_POST['name']."',descripcion='".$_POST['descripcion']."',costo='".$_POST['costo']."',direccion='".$_POST['direccion']."',fechaFin='".$_POST['fechaFin']."' WHERE id=".$_POST['id']."" ;
+		mysql_query($sql,$conexion);
+	
+		// Cerrar la conexión
+		disconnect($conexion);
+		
+		echo "<script>alert('Datos actualizados');</script>"; 
+	}
 
 	function connect()
 	{
