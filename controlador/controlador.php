@@ -41,6 +41,7 @@
 						include('vista/plantilla.php');
 						break;
 					case 'sc'://Agregar servicio
+						$subcategorias = getSubcategoriasCombo();
 						$content2 = 'vista/servicio.php';
 						$content = 'vista/configuracion.php';
 						include('vista/plantilla.php');
@@ -67,6 +68,7 @@
 						break;
 					case 'sm'://Modificar servicio
 						$dataservicio = getPservicio(@$_REQUEST['id']);
+						$subcategorias = getSubcategoriasCombo();
 						$content2 = 'vista/servicio.php';
 						$content = 'vista/configuracion.php';
 						include('vista/plantilla.php');						
@@ -153,7 +155,6 @@
 					echo '<script>alert("Usuario o Contraseña Inválida");
 					document.location = "index.php?namePage=login";
 					</script>';
-					//header("Location:index.php?namePage=login");
 				}
 				
 			}else if($_POST["actionform"]=="register"){
@@ -165,7 +166,54 @@
 					echo '<script>alert("No se pudieron guardar los datos");
 					document.location = "index.php?namePage=login";
 					</script>';
-					//header("Location:index.php?namePage=login");
+				}
+				
+			}else if($_POST["actionform"]=="actualServ"){
+				$actualizarServicio = actualizarServicio();
+				$myServicios=getMyServices();
+				$content2 = 'vista/vacio.php';
+				$content = 'vista/configuracion.php';
+				include('vista/plantilla.php');			
+				if($actualizarServicio){
+					echo '<script>alert("Datos modificados");
+					document.location = "index.php?namePage=configuracion";
+					</script>';
+				}else{
+					echo '<script>alert("No se pudieron modificar los datos");
+					document.location = "index.php?namePage=configuracion";
+					</script>';
+				}
+				
+			}else if($_POST["actionform"]=="addServ"){
+				$actualizarServicio = addService();
+				$myServicios=getMyServices();
+				$content2 = 'vista/vacio.php';
+				$content = 'vista/configuracion.php';
+				include('vista/plantilla.php');			
+				if($actualizarServicio){
+					echo '<script>alert("Datos guardados");
+					document.location = "index.php?namePage=configuracion";
+					</script>';
+				}else{
+					echo '<script>alert("No se pudieron guardar los datos");
+					document.location = "index.php?namePage=configuracion";
+					</script>';
+				}
+				
+			}else if($_POST["actionform"]=="modifUser"){
+				$modifUser = actualizarUser();
+				$myServicios=getMyServices();
+				$content2 = 'vista/vacio.php';
+				$content = 'vista/configuracion.php';
+				include('vista/plantilla.php');			
+				if($modifUser){
+					echo '<script>alert("Datos guardados");
+					document.location = "index.php?namePage=configuracion";
+					</script>';
+				}else{
+					echo '<script>alert("No se pudieron guardar los datos");
+					document.location = "index.php?namePage=configuracion";
+					</script>';
 				}
 				
 			}else{
@@ -183,11 +231,19 @@
 		}
 	}
 	
-	function agregarServicio(){
-	
-		$content = 'vista/configuracion.php';
-		$content2 = 'vista/servicio.php';
-		include('vista/plantilla.php');
-	}
+	//Acciones
+        if(isset($_POST['actionform'])){
+                if($_POST["actionform"]=="login"){
+                        $addresses = login();
+                        //$content = '../Index2/vista/principal.php';
+                        //include('../Index2/vista/plantilla.php');
+                }else if($_POST["actionform"]=="register"){
+                        register();
+                }//else if($_POST["actionform"]=="edit"){
+                //      edit();
+                //}else if($_POST["actionform"]=="login"){
+                //      login();
+                //}
+        }
 	
 ?>

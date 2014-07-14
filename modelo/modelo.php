@@ -2,16 +2,16 @@
  
 	function login()
 	{
-		if($_POST['password'] && $_POST['user']){
+		$login = true;
+		if(isset($_POST['password']) && isset($_POST['user'])){
 			// Conectar con la base de datos y seleccionarla
 			$conexion = connect();
-			$sql = "SELECT * FROM puser WHERE user = '".$_POST['user']."'";
+			$sql = "SELECT * FROM puser WHERE user = '".$_POST['user']."' AND password = '".$_POST['password']."'";
 			
 			// Ejecutar la consulta SQL
 			$resultado = mysql_query($sql, $conexion);
 			if (!$resultado) {
-				echo mysql_error();
-				exit;
+				$login = false;
 			}
 			// Crear el array de elementos para la capa de la vista
 			$datauser = array();
@@ -22,14 +22,12 @@
 
 			// Cerrar la conexión
 			disconnect($conexion);
-			
-			$login = false;
-			if($datauser[0][1]==$_POST['user'] && $datauser[0][2]==$_POST['password']){
+			if($login){
 				// Guardamos una variable
 				$_SESSION['id'] = $datauser[0][0]; 
 				$_SESSION['nombre'] = $datauser[0][1]; 
-				$login = true;
 			}
+			
 			return $login;
 		}
 	}
@@ -70,6 +68,27 @@
 			}
 			return $login;
 		}
+	}
+	
+	function actualizarUser(){
+		$resultado = true;
+		// Conectar con la base de datos y seleccionarla
+		$conexion = connect();
+		if(isset($_POST['password'])&&$_POST['password']!=""){
+			$sql = "UPDATE puser SET user='".$_POST['user']."',password='".$_POST['password']."',email='".$_POST['email']."',rol='".$_POST['rol']."',nombre='".$_POST['name']."',fechanacimiento='".$_POST['fechanacimiento']."',profesion='".$_POST['profesion']."',telefono='".$_POST['telefono']."' WHERE id = ".$_SESSION['id'];
+		}else{
+			$sql = "UPDATE puser SET user='".$_POST['user']."',email='".$_POST['email']."',rol='".$_POST['rol']."',nombre='".$_POST['name']."',fechanacimiento='".$_POST['fechanacimiento']."',profesion='".$_POST['profesion']."',telefono='".$_POST['telefono']."' WHERE id = ".$_SESSION['id'];
+		}
+		$resultado = mysql_query($sql,$conexion);
+		if (!$resultado) {
+			$resultado = false;
+		}
+	
+		// Cerrar la conexión
+		disconnect($conexion);
+		
+		return $resultado;
+		
 	}
 	
 	function getAddresses()
@@ -162,7 +181,7 @@ echo "login";
 	{
 		// Conectar con la base de datos y seleccionarla
 		$conexion = connect();
-		$sql = "SELECT * FROM puser WHERE user = '".$_SESSION['nombre']."'";
+		$sql = "SELECT * FROM puser WHERE id = '".$_SESSION['id']."'";
 		
 		// Ejecutar la consulta SQL
 		$resultado = mysql_query($sql, $conexion);
@@ -298,6 +317,32 @@ echo "login";
 		return $datasubcategorias;
 	}
 	
+	function getSubcategoriasCombo()
+	{
+		// Crear el array de elementos para la capa de la vista
+		$datasubcategorias = array();
+			// Conectar con la base de datos y seleccionarla
+			$conexion = connect();
+			$sql = "SELECT * FROM psubcategoria";
+			
+			// Ejecutar la consulta SQL
+			$resultado = mysql_query($sql, $conexion);
+			if (!$resultado) {
+				echo mysql_error();
+				exit;
+			}
+			
+			while ($fila = mysql_fetch_array($resultado))
+			{
+				$datasubcategorias[] = $fila;
+			}
+
+			// Cerrar la conexión
+			disconnect($conexion); 
+	
+		return $datasubcategorias;
+	}
+	
 	function getPservicio($id)
 	{
 		// Crear el array de elementos para la capa de la vista
@@ -326,16 +371,40 @@ echo "login";
 	}
 	
 	function actualizarServicio(){
+		$resultado = true;
 		// Conectar con la base de datos y seleccionarla
 		$conexion = connect();
 		
-		$sql = "UPDATE pservicio SET name='".$_POST['name']."',descripcion='".$_POST['descripcion']."',costo='".$_POST['costo']."',direccion='".$_POST['direccion']."',fechaFin='".$_POST['fechaFin']."' WHERE id=".$_POST['id']."" ;
-		mysql_query($sql,$conexion);
+		$sql = "UPDATE pservicio SET name='".$_POST['name']."',descripcion='".$_POST['descripcion']."',costo='".$_POST['costo']."',fechaFin='".$_POST['fechaFin']."' WHERE id=".$_POST['id']."" ;
+		$resultado = mysql_query($sql,$conexion);
+		if (!$resultado) {
+			$resultado = false;
+		}
 	
 		// Cerrar la conexión
 		disconnect($conexion);
 		
-		echo "<script>alert('Datos actualizados');</script>"; 
+		return $resultado;
+		
+	}
+	
+	function addService(){
+	
+		$result = true;
+		
+		// Conectar con la base de datos y seleccionarla
+		$conexion = connect();
+		
+		$sql = "INSERT INTO pservicio (name,descripcion,costo,fechaInicio,fechaFin,id_categoria,id_subcategoria,id_user) VALUES ('".$_POST['name']."','".$_POST['descripcion']."','".$_POST['costo']."','".$_POST['fechaInicio']."','".$_POST['fechaFin']."','".$_POST['categoria']."','".$_POST['subcategoria']."','".$_SESSION['id']."')";
+		$resultado = mysql_query($sql,$conexion);
+		if (!$resultado) {
+			$result = false;
+		}
+		
+		// Cerrar la conexión
+		disconnect($conexion);
+		
+		return $result;		
 	}
 
 	function connect()

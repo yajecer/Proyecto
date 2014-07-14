@@ -8,7 +8,6 @@
 							<label><span class="text-form">Usuario:</span><input type="text" name="user" required /></label>
 							<label><span class="text-form">Contraseña:</span><input type="password" name="password" required ></label>
 							<div class="buttons">
-								<!--a onClick="document.getElementById('contact-form').submit()">Aceptar</a-->
 								<input type="hidden" name="actionform" value="login"/>
 								<input type="submit">
 							</div>
@@ -31,7 +30,6 @@
 							<label><span class="text-form">Contraseña:</span><input type="password" required/></label>
 							<label><span class="text-form">Confirmación Contraseña:</span><input type="password" required/></label>
 							<div class="buttons">
-								<!--a onClick="document.getElementById('contact-formr').submit()">Aceptar</a-->
 								<input type="hidden" name="actionform" value="register"/>
 								<input type="submit">
 							</div>
